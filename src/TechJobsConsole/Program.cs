@@ -22,6 +22,8 @@ namespace TechJobsConsole
             columnChoices.Add("position type", "Position Type");
             columnChoices.Add("all", "All");
 
+            
+
             Console.WriteLine("Welcome to LaunchCode's TechJobs App!");
 
             // Allow user to search/list until they manually quit with ctrl+c
@@ -60,10 +62,12 @@ namespace TechJobsConsole
 
                     List<Dictionary<string, string>> searchResults;
 
-                    // Fetch results
+                    // Fetch results (Part 2)
                     if (columnChoice.Equals("all"))
                     {
-                        Console.WriteLine("Search all fields not yet implemented.");
+                        searchResults = JobData.FindByValue(searchTerm);
+                        Console.WriteLine("Results featuring '" + searchTerm +  "':");
+                        PrintJobs(searchResults);                       
                     }
                     else
                     {
@@ -118,7 +122,16 @@ namespace TechJobsConsole
 
         private static void PrintJobs(List<Dictionary<string, string>> someJobs)
         {
-            Console.WriteLine("PrintJobs is not implemented yet");
+            foreach (Dictionary<string, string> job in someJobs)
+            {
+                Console.WriteLine("*****");
+                foreach (var element in job)
+                {
+                    Console.WriteLine(element.Key + ": " + element.Value);
+                    
+                }
+            }
+            Console.WriteLine("\n*****");
         }
     }
 }

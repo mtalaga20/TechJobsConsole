@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -24,32 +25,35 @@ namespace TechJobsConsole
         {
             LoadData();
 
+            List<string> trueValues = new List<string>();
             List<string> values = new List<string>();
 
             foreach (Dictionary<string, string> job in AllJobs)
             {
                 string aValue = job[column];
-
-                if (!values.Contains(aValue))
+                string checkValue = aValue.ToString();
+                if (!values.Contains(checkValue))
                 {
-                    values.Add(aValue);
+                    values.Add(checkValue);
+                    trueValues.Add(aValue);
                 }
             }
-            return values;
+            return trueValues;
         }
 
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
             // load data, if not already loaded
             LoadData();
-
+            string lowValue = value.ToString();
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
                 string aValue = row[column];
+                string lowAValue = aValue.ToString();
 
-                if (aValue.Contains(value))
+                if (lowAValue.Contains(lowValue))
                 {
                     jobs.Add(row);
                 }
@@ -137,6 +141,45 @@ namespace TechJobsConsole
             valueBuilder.Clear();
 
             return rowValues.ToArray();
+        }
+
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            List<int> usedRows = new List<int>();
+            int position = -1;
+            string lowValue = value.ToLower();   
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+
+                position++;
+                //check to see if row has been used (#1)
+                //Also add value found to jobs
+
+                
+                foreach (var element in row)
+                {
+                    string lowElement = element.Value.ToLower();
+                      
+                    if (usedRows.Contains(position))
+                    {
+                        goto AfterLoop;
+                    }
+                    if (lowElement.Contains(lowValue))
+                    {
+                        jobs.Add(row);
+                        usedRows.Add(position);
+                    }
+
+                }
+            AfterLoop:
+                continue;
+            
+            }
+            return jobs;
+
         }
     }
 }
