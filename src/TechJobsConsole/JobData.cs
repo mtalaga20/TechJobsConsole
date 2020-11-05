@@ -45,13 +45,13 @@ namespace TechJobsConsole
         {
             // load data, if not already loaded
             LoadData();
-            string lowValue = value.ToString();
+            string lowValue = value.ToString().ToLower();
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
                 string aValue = row[column];
-                string lowAValue = aValue.ToString();
+                string lowAValue = aValue.ToString().ToLower();
 
                 if (lowAValue.Contains(lowValue))
                 {
